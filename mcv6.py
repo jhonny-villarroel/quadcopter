@@ -215,6 +215,8 @@ def setMotor34r():
 	setMotor4r()
 			
 def setMotor1234f():
+	global min
+	min=min+1
 	setMotor1f()
 	setMotor2f()
 	setMotor3f()
