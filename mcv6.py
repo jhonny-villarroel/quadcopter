@@ -223,6 +223,7 @@ def setMotor1234f():
 	setMotor4f()
 	
 def setMotor1234r():
+	min=min-1
 	setMotor1r()
 	setMotor2r()
 	setMotor3r()
