@@ -98,7 +98,8 @@ class KBHit:
             dr,dw,de = select([sys.stdin], [], [], 0)
             return dr != []
     
-    
+ejeX=0
+ejeY=0    
 
 initial=36
 
@@ -223,22 +224,40 @@ def setMotor1234f():
 	setMotor4f()
 	
 def setMotor1234r():
+	global min
 	min=min-1
 	setMotor1r()
 	setMotor2r()
 	setMotor3r()
 	setMotor4r()
 
-options = {"a": setMotor1f,"z": setMotor1r,"s": setMotor2f,"x": setMotor2r,"d": setMotor3f,"c": setMotor3r,"f": setMotor4f,"v": setMotor4r,"h": setMotor12f,"n": setMotor12r, "j": setMotor34f,"m": setMotor34r,"o": setMotor1234f,"l": setMotor1234r}
+def angleLeft():
+	global ejeX
+	ejeX=ejeX-1
+
+def angleRight():
+	global ejeX
+	ejeX=ejeX+1
+	
+def angleForward():
+	global ejeY
+	ejeY=ejeY+1
+
+def angleBack():
+	global ejeY
+	ejeY=ejeY-1
+	
+options = {"8": angleForward,"2": angleBack,"4": angleRight,"6": angleLeft,"a": setMotor1f,"z": setMotor1r,"s": setMotor2f,"x": setMotor2r,"d": setMotor3f,"c": setMotor3r,"f": setMotor4f,"v": setMotor4r,"h": setMotor12f,"n": setMotor12r, "j": setMotor34f,"m": setMotor34r,"o": setMotor1234f,"l": setMotor1234r}
 	
 def updateEngine(keyr):	
 	global options
-	if keyr=="a" or keyr=="z" or keyr=="s" or keyr=="x" or keyr=="d" or keyr=="c" or keyr=="f" or keyr=="v" or keyr=="h" or keyr=="n" or keyr=="j" or keyr=="m" or keyr=="o" or keyr=="l":
+	if keyr=="2" or keyr=="8" or keyr=="4" or keyr=="6" or keyr=="a" or keyr=="z" or keyr=="s" or keyr=="x" or keyr=="d" or keyr=="c" or keyr=="f" or keyr=="v" or keyr=="h" or keyr=="n" or keyr=="j" or keyr=="m" or keyr=="o" or keyr=="l":
 		func = options[keyr]
 		func()
 
 def pidX(anguloX):
-	if anguloX>0:
+	global ejeX
+	if anguloX>ejeX:
 		setMotor1f()
 		setMotor2r()
 	else:
@@ -246,7 +265,8 @@ def pidX(anguloX):
 		setMotor1r()
 		
 def pidY(anguloY):
-	if anguloY>0:
+	global ejeY
+	if anguloY>ejeY:
 		setMotor3f()
 		setMotor4r()
 	else:
@@ -258,7 +278,7 @@ try:
 	print("Connect power to ESC and wait beep-beep and press enter")
 	res=raw_input()
 
-	kb = KBHit()
+	kb = KBHit()	
 	while True:
 		os.system("clear");
 		print("start controls:");
@@ -268,12 +288,14 @@ try:
 		print("motor 4:",motor4);
 		
 		if kb.kbhit():
-			keyr = kb.getch()
+			keyr = kb.getch()			
 			updateEngine(keyr)
 			
 		angulos = mpu6050.getAnglesXY()
 		pidX(angulos[0])
 		pidY(angulos[1])
+		print("anguloEsperadoX",ejeX)
+		print("anguloEsperadoY",ejeY)
 		print("anguloX",angulos[0])
 		print("anguloY",angulos[1])
 
