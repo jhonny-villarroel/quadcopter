@@ -48,7 +48,7 @@ def getAnglesXY():
 	# Now wake the 6050 up as it starts in sleep mode
 	bus.write_byte_data(address, power_mgmt_1, 0)
 
-	errorX=0.16924067
+	errorX=0.59924067
 	errorY=0.13554397
 
 
